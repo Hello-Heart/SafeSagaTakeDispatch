@@ -1,17 +1,21 @@
 import {
-    takeEvery, call, put,race, delay
+    takeEvery, call, put,race, delay, take
   } from 'redux-saga/effects';
-export default createSafeDispatch = ({eventName, defaultTimeout = 500 }) => {
-    const actionReadyName = `${eventName}-READY`
+
+export let dispatchers = {
+
+}
+
+export const createSafeDispatch = ({eventName, defaultTimeout = 500, dispatchDefaultEffect = takeEvery }) => {
+    const actionReadyName = `SAFE-DISPATCHER-${eventName}-READY`
     /**
      * creates a a safe dispatch, 
      * either we wait for actionReadyName to be dispatched
      * or dipstahcing it if timeout has occoured
      */
-    const safeDispatch = function* _(params) {
-       //yield race[yield take(actionReadyName), yield delay(defaultTimeout)]
-       yield take(actionReadyName)
-       yield put(eventName(...params))
+    const safeDispatch = function* _(...params) {
+       yield race([take(actionReadyName), delay(defaultTimeout)])
+       yield put(eventName, ...params)
     }
 
     /**
@@ -19,10 +23,14 @@ export default createSafeDispatch = ({eventName, defaultTimeout = 500 }) => {
      * takes a callback to initialize, then let's the disptacher 
      * know he's ready
      */
-    const safeTake = function* safeDispatch(callback = function* _(){}) {
-        yield take(callback)
-        yield put(actionReadyName)
+    const safeTake = function* _(callback = function* _(){}) {
+      yield take(callback)
+      yield put({type: actionReadyName, actionType: 'dispatch'})
      }
+    
+    dispatchers[eventName] = safeDispatch
 
     return {safeTake, safeDispatch}
 }
+
+export default {createSafeDispatch, dispatchers}
