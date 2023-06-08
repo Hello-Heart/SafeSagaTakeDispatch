@@ -1,0 +1,25 @@
+{
+  "name": "safe-saga-dispatch",
+  "version": "1.0.0",
+  "description": "This package solves race conditions between takes and dipatches",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hello-Heart/SafeSagaTakeDispatch.git"
+  },
+  "keywords": [
+    "saga"
+  ],
+  "author": "Tomer Kobrinsky",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hello-Heart/SafeSagaTakeDispatch/issues"
+  },
+  "homepage": "https://github.com/Hello-Heart/SafeSagaTakeDispatch#readme",
+  "peerDependencies": {
+    "redux-saga": "^1.1.3"
+  }
+}
